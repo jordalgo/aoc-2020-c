@@ -31,7 +31,7 @@ int main (int argc, char **argv) {
    
     fclose(input_file);
 
-    int first, second, x, y;
+    int first, second, third, x, y, z;
     bool found = false;
 
     for (x=0; x<=index; x++) {
@@ -50,8 +50,38 @@ int main (int argc, char **argv) {
        }
     }
 
-    printf("Answer is: %d", first * second);
+    printf("Answer to part 1 is: %d", first * second);
 
+    found = false;
+
+    for (x=0; x<=index; x++) {
+       if (found) {
+         break;
+       }
+       first = nums[x];	    
+       for (y=0; y<=index; y++) {
+	 if (found) {
+           break;
+	 }
+         if (y != x) {
+	   second = nums[y];
+           
+	   for (z=0; z<=index; z++) {
+		if (z != x) {
+		  third = nums[z];	
+	   	  if ((first + second + third) == 2020) {
+	      	    found = true;
+	            break;
+	          }
+	        }
+	   }
+
+	 }
+       }
+    }
+
+    printf("\n");
+    printf("Answer to part 2 is: %d", first * second * third);
     printf("\n");
 
     return 0;
