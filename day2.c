@@ -54,9 +54,6 @@ int main (int argc, char **argv) {
         ptr = strtok(NULL, delim);
         ++parseIndex;
       }
-      if (index == 999) {
-        break;
-      }
       ++index;
       parseIndex = 0;
 
@@ -65,7 +62,7 @@ int main (int argc, char **argv) {
 
     int x;
     int validCount = 0;
-    for (x=0; x<=index; x++) {
+    for (x=0; x<index; x++) {
       size_t i = 0;
       int count = 0;
       while (passwords[x].pw[i] != '\0') {
@@ -79,7 +76,22 @@ int main (int argc, char **argv) {
       }
     }
 
-    printf("Valid Count: %d", validCount);
+    printf("Valid Count: %d\n", validCount);
+
+    validCount = 0;
+    for (x=0; x<index; x++) {
+      int pos1 = passwords[x].min - 1;
+      int pos2 = passwords[x].max - 1;
+      if (passwords[x].pw[pos1] == passwords[x].letter && passwords[x].pw[pos2] != passwords[x].letter) {
+        ++validCount;
+        continue;
+      }
+      if (passwords[x].pw[pos1] != passwords[x].letter && passwords[x].pw[pos2] == passwords[x].letter) {
+        ++validCount;
+      }
+    }
+
+    printf("Valid Count Part 2: %d", validCount);
 
     return 0;
 }
