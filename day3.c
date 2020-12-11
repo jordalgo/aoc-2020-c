@@ -6,7 +6,32 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdint.h>
 
+int getHitTreeCount(int moveX, int moveY, int lineLen, const int inputs[][lineLen], int inputsLen) {
+  int treeCount = 0;
+  int i, x = 0;
+
+  for (i = 0; i < inputsLen - 1;) {
+    x = x + moveX;
+
+    if (x >= lineLen) {
+      x = x - lineLen;
+    }
+
+    i = i + moveY;
+
+    if (i >= inputsLen) {
+      break;
+    }
+
+    if (inputs[i][x] == 2) {
+      ++treeCount;
+    }
+  }
+
+  return treeCount;
+}
 
 int main (int argc, char **argv) {
     char *input = "day3-input.txt";
@@ -50,24 +75,19 @@ int main (int argc, char **argv) {
       ++index;
     }
 
-    index = 0;
+    uint64_t hitTreeCount = getHitTreeCount(3, 1, linelen, inputs, numlines);
 
-    int x = 0;
-    int treeCount = 0;
+    printf("Tree Count:%llu\n", hitTreeCount);
 
-    for (i = 0; i < numlines - 1; i++) {
-      x = x + 3;
+    uint64_t hitTreeCount2 = getHitTreeCount(1, 1, linelen, inputs, numlines);
+    uint64_t hitTreeCount3 = getHitTreeCount(5, 1, linelen, inputs, numlines);
+    uint64_t hitTreeCount4 = getHitTreeCount(7, 1, linelen, inputs, numlines);
+    uint64_t hitTreeCount5 = getHitTreeCount(1, 2, linelen, inputs, numlines);
 
-      if (x >= linelen) {
-        x = x - linelen;
-      }
+    uint64_t n = hitTreeCount * hitTreeCount2 * hitTreeCount3 * hitTreeCount4 * hitTreeCount5;
 
-      if (inputs[i + 1][x] == 2) {
-        ++treeCount;
-      }
-    }
+    printf("Tree Count 2: %llu\n", n);
 
-    printf("Tree Count: %d\n", treeCount);
     fclose(input_file);
 
     return 0;
