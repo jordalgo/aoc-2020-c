@@ -11,6 +11,10 @@
 #include <math.h>
 
 
+int cmpfunc (const void * a, const void * b) {
+   return ( *(int*)a - *(int*)b );
+}
+
 int main (int argc, char **argv) {
     char *input = "day5-input.txt";
     FILE *input_file = fopen(input, "r");
@@ -27,8 +31,11 @@ int main (int argc, char **argv) {
 
     int highest_id = 0;
 
+    int ids[2000];
+    int count = 0;
+
     while ((read = getline(&line, &len, input_file)) != -1) {
-      printf("line %s", line);
+      //printf("line %s", line);
       char * t; // first copy the pointer to not change the original
       int row_min = 0;
       int row_max = 127;
@@ -75,12 +82,28 @@ int main (int argc, char **argv) {
         highest_id = id;
       }
 
+      ids[count] = id;
+       ++count;
+
       // printf("selected_row %d\n", selected_row);
       // printf("selected_col %d\n", selected_col);
       // printf("row id %d\n", (selected_row * 8) + selected_col);
     }
 
+    qsort(ids, count, sizeof(int), cmpfunc);
+
     printf("highest id %d", highest_id);
+
+    int min_id = ids[0];
+
+    int n;
+    for( n = 0 ; n < count; n++ ) {
+      while (min_id != ids[n] && min_id < ids[n]) {
+        printf("missing %d\n", min_id);
+        ++min_id;
+      }
+      ++min_id;
+    }
 
     fclose(input_file);
 
