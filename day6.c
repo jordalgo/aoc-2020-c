@@ -121,7 +121,53 @@ int main (int argc, char **argv) {
       }
     }
 
-    printf("Answered Count %d", answered_count);
+    printf("Answered Count %d\n", answered_count);
+
+    fseek(input_file, 0, SEEK_SET);
+    memset(alphabet, 0, sizeof(alphabet));
+
+    answered_count = 0;
+    line = NULL;
+    len = 0;
+    int people_count = 0;
+
+    while ((read = getline(&line, &len, input_file)) != -1) {
+      char * t; // first copy the pointer to not change the original
+      int size = 0;
+
+      for (t = line; *t != '\0'; t++) {
+        int idx = get_char_index(t[0]);
+        // printf("char %c and idx %d\n", t[0], idx);
+        if (idx != 100) {
+          alphabet[idx] = alphabet[idx] + 1;
+        }
+      }
+
+      if (line[0] == '\n') {
+        // printf("peoplecount %d\n", people_count);
+        int x;
+        for (x =0; x < 26; x++) {
+          if (alphabet[x] == people_count) {
+            //printf("found num %d at idx %d\n", people_count, x);
+            ++answered_count;
+          }
+        }
+        memset(alphabet, 0, sizeof(alphabet));
+        people_count = 0;
+      } else {
+        ++people_count;
+      }
+    }
+
+    //printf("people count %d", people_count);
+
+    for (x =0; x < 26; x++) {
+      if (alphabet[x] == people_count) {
+        ++answered_count;
+      }
+    }
+
+    printf("Answered Count Next %d", answered_count);
 
     fclose(input_file);
 
